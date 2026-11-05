@@ -5,10 +5,10 @@
 #define c1 (IOPIN1&(1<<17))
 #define c2 (IOPIN1&(1<<18))
 #define c3 (IOPIN1&(1<<19))
-#define r0 1<<20
-#define r1 1<<21
-#define r2 1<<22
-#define r3 1<<23
+#define r0 1<<27
+#define r1 1<<28
+#define r2 1<<29
+#define r3 1<<30                                                                        
 
 //void delay_ms(unsigned int);
 	

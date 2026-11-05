@@ -1,56 +1,45 @@
-#include <lpc21xx.h>
+#include<lpc21xx.h>		   
+#define lcd_d 0xff
+#define RS 1<<8
+#define E 1<<9
 
 
-#define lcd_d 0x0f<<8
-#define RS 1<<6
-#define E 1<<7
 
-void delay_ms(unsigned int );
 void LCD_INIT(void);
-void LCD_DATA(unsigned char);
 void LCD_COMMAND(unsigned char);
+void LCD_DATA(unsigned char);
 void LCD_STRING(unsigned char *);
 void LCD_INTEGER(int);
+void delay_ms(unsigned int );
+
+
 
 void LCD_INIT(void)
 {
-	IODIR0=lcd_d|RS|E;
+	IODIR0|=lcd_d|RS|E;
 	LCD_COMMAND(0X01);
 	LCD_COMMAND(0X02);
 	LCD_COMMAND(0X0C);
-	LCD_COMMAND(0x28);
+	LCD_COMMAND(0x38);
 }
 
 void LCD_COMMAND(unsigned char ch)
 {
 	//UPPER NIBBLE
 	IOCLR0=lcd_d;
-	IOSET0=(ch&0XF0)<<4;
+	IOSET0=ch;
 	IOCLR0=RS;
 	IOSET0=E;
 	delay_ms(2);
 	IOCLR0=E;
-	// LOWER NIBBLE
-	IOCLR0=lcd_d;
-	IOSET0=(ch&0X0F)<<8;
-	IOCLR0=RS;
-	IOSET0=E;
-	delay_ms(2);
-	IOCLR0=E;
+
 }
 
 void LCD_DATA(unsigned char d)
 {
 	//UPPER NIBBLE
 	IOCLR0=lcd_d;
-	IOSET0=(d&0XF0)<<4;
-	IOSET0=RS;
-	IOSET0=E;
-	delay_ms(2);
-	IOCLR0=E;
-	// LOWER NIBBLE
-	IOCLR0=lcd_d;
-	IOSET0=(d&0X0F)<<8;
+	IOSET0=d;
 	IOSET0=RS;
 	IOSET0=E;
 	delay_ms(2);
@@ -75,7 +64,7 @@ void delay_ms(unsigned int ms)
 	T0TCR=0X01;
 	while(T0TC<ms);
 	T0TCR=0X03;
-	T0TCR=0X00;
+	T0TCR=0;
 }
 
 void LCD_INTEGER(int n)
